@@ -61,7 +61,7 @@ async function getComment(id) {
           return alert("You must write the comment!");
         }
         try {
-          await axios.patch(`/comments/${comment.id}`, { comment: newComment });
+          await axios.patch(`/comments/${comment._id}`, { comment: newComment });
           getComment(id);
         } catch (err) {
           console.error(err);
