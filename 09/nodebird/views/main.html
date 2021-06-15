@@ -7,14 +7,7 @@
         <textarea id="twit" name="content" maxlength="140"></textarea>
       </div>
       <div class="img-preview">
-        <img
-          id="img-preview"
-          src=""
-          style="display: none"
-          width="250"
-          alt="미리보기
-                        "
-        />
+        <img id="img-preview" src="" style="display: none" width="250" alt="미리보기" />
         <input id="img-url" type="hidden" name="url" />
       </div>
       <div>
@@ -40,7 +33,7 @@
       {% endif %}
       <div class="twit-content">{{twit.content}}</div>
       {% if twit.img %}
-      <div class="twit-img"><img src="{{twit.img}}" alt="thumbnamil" /></div>
+      <div class="twit-img"><img src="{{twit.img}}" alt="thumbnail" /></div>
       {% endif %}
     </div>
     {% endfor %}
@@ -58,7 +51,7 @@
         .then((res) => {
           document.getElementById("img-url").value = res.data.url;
           document.getElementById("img-preview").src = res.data.url;
-          document.getElementById("img-preview").style.display = none;
+          document.getElementById("img-preview").style.display = "inline";
         })
         .catch((err) => {
           console.error(err);
