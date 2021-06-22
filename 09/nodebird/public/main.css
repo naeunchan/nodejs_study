@@ -46,6 +46,20 @@ textarea {
   }
 }
 
+.title-box {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+  text-align: center;
+}
+
+.title {
+  font-size: 50px;
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+}
+
 .input-group {
   margin-bottom: 15px;
 }

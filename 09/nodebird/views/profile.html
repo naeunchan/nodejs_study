@@ -1,5 +1,17 @@
 {% extends "layout.html" %} {% block content %}
 <div class="timeline">
+  <div class="my-profile">
+    <h2>My Profile</h2>
+    <div class="input-group">
+      <label for="join-nick">nickname</label>
+      <input type="text" name="join-nick" id="join-nick" placeholder="{{user.nick}}" />
+    </div>
+    <div class="input-group">
+      <label for="join-password">password</label>
+      <input type="password" name="join-password" id="join-password" />
+    </div>
+    <button id="join-btn" type="submit" class="btn">Update</button>
+  </div>
   <div class="followings half">
     <h2>Following List</h2>
     {% if user.Followings %} {% for following in user.Followings %}
