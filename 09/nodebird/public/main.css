@@ -73,6 +73,11 @@ textarea {
   width: 70%;
 }
 
+#update-email::placeholder {
+  color: black;
+  font-weight: bold;
+}
+
 .half {
   float: left;
   width: 50%;
@@ -221,7 +226,8 @@ textarea {
   text-align: right;
 }
 
-#join-form {
+#join-form,
+#update-form {
   padding: 10px;
   text-align: center;
 }
