@@ -3,14 +3,24 @@
   <div class="my-profile">
     <h2>My Profile</h2>
     <div class="input-group">
-      <label for="join-nick">nickname</label>
-      <input type="text" name="join-nick" id="join-nick" placeholder="{{user.nick}}" />
+      <label for="update-email">email</label>
+      <input
+        type="text"
+        name="update-email"
+        id="update-email"
+        placeholder="{{user.email}}"
+        readonly
+      />
     </div>
     <div class="input-group">
-      <label for="join-password">password</label>
-      <input type="password" name="join-password" id="join-password" />
+      <label for="update-nick">nickname</label>
+      <input type="text" name="update-nick" id="update-nick" placeholder="{{user.nick}}" />
     </div>
-    <button id="join-btn" type="submit" class="btn">Update</button>
+    <div class="input-group">
+      <label for="update-password">password</label>
+      <input type="password" name="update-password" id="update-password" />
+    </div>
+    <button id="update-btn" type="submit" class="btn">Update</button>
   </div>
   <div class="followings half">
     <h2>Following List</h2>
@@ -25,4 +35,23 @@
     {% endfor %} {% endif %}
   </div>
 </div>
+<script>
+  btn = document.querySelector("#update-btn");
+  btn.addEventListener("click", function () {
+    const myId = document.querySelector("#my-id");
+
+    if (myId) {
+      if (confirm("Do you wanna update your profile?")) {
+        axios
+          .post(`/user/${myId}/profile`)
+          .then(() => {
+            location.reload();
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
+    }
+  });
+</script>
 {% endblock %}
