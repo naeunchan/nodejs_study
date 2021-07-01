@@ -39,9 +39,9 @@
   btn = document.querySelector("#update-btn");
   btn.addEventListener("click", function () {
     const myId = document.querySelector("#my-id");
-    const nick = document.querySelector("#update-nick").textContent;
-    const password = document.querySelector("#update-password").textContent;
-    console.log(nick, password);
+    const nick = document.querySelector("#update-nick").value;
+    const password = document.querySelector("#update-password").value;
+
     if (myId) {
       if (confirm("Do you wanna update your profile?")) {
         axios
