@@ -35,13 +35,13 @@
     {% endfor %} {% endif %}
   </div>
 </div>
-<!-- <script>
+<script>
   btn = document.querySelector("#update-btn");
   btn.addEventListener("click", function () {
     const myId = document.querySelector("#my-id");
     const nick = document.querySelector("#update-nick").textContent;
     const password = document.querySelector("#update-password").textContent;
-
+    console.log(nick, password);
     if (myId) {
       if (confirm("Do you wanna update your profile?")) {
         axios
@@ -58,5 +58,5 @@
       }
     }
   });
-</script> -->
+</script>
 {% endblock %}
