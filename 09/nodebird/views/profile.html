@@ -14,11 +14,11 @@
     </div>
     <div class="input-group">
       <label for="update-nick">nickname</label>
-      <input type="text" name="update-nick" id="update-nick" placeholder="{{user.nick}}" />
+      <input type="text" name="nick" id="update-nick" placeholder="{{user.nick}}" />
     </div>
     <div class="input-group">
       <label for="update-password">password</label>
-      <input type="password" name="update-password" id="update-password" />
+      <input type="password" name="password" id="update-password" />
     </div>
     <button id="update-btn" type="submit" class="btn">Update</button>
   </div>
@@ -35,15 +35,20 @@
     {% endfor %} {% endif %}
   </div>
 </div>
-<script>
+<!-- <script>
   btn = document.querySelector("#update-btn");
   btn.addEventListener("click", function () {
     const myId = document.querySelector("#my-id");
+    const nick = document.querySelector("#update-nick").textContent;
+    const password = document.querySelector("#update-password").textContent;
 
     if (myId) {
       if (confirm("Do you wanna update your profile?")) {
         axios
-          .post(`/user/${myId}/profile`)
+          .post(`/user/${myId}/profile`, {
+            nick,
+            password,
+          })
           .then(() => {
             location.reload();
           })
@@ -53,5 +58,5 @@
       }
     }
   });
-</script>
+</script> -->
 {% endblock %}

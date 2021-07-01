@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post("/join", isNotLoggedIn, async (req, res, next) => {
   const { email, nick, password } = req.body;
-  console.log(email, nick, password);
+
   try {
     const exUser = await User.findOne({ where: { email } });
 
