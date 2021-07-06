@@ -23,10 +23,17 @@ router.get("/join", isNotLoggedIn, (req, res, next) => {
 router.get("/", async (req, res, next) => {
   try {
     const posts = await Post.findAll({
-      include: {
-        model: User,
-        attributes: ["id", "nick"],
-      },
+      include: [
+        {
+          model: User,
+          attributes: ["id", "nick"],
+        },
+        {
+          model: User,
+          attributes: ["id", "nick"],
+          as: "Liker",
+        },
+      ],
       order: [["createdAt", "DESC"]],
     });
     res.render("main", {

@@ -32,6 +32,10 @@
       <button class="twit-follow">Follow</button>
       {% elif followerIdList.includes(twit.User.id) and twit.User.id !== user.id %}
       <button class="twit-unfollow">Unfollow</button>
+      {% endif %} {% if not twit.Liker.includes(user.id) %}
+      <button class="twit-like">Like</button>
+      {% else %}
+      <button class="twit-unlike">Unlike</button>
       {% endif %}
       <div class="twit-content">{{twit.content}}</div>
       {% if twit.img %}
@@ -46,7 +50,6 @@
   if (document.getElementById("img")) {
     document.getElementById("img").addEventListener("change", function (e) {
       const formData = new FormData();
-      console.log(this, this.files);
       formData.append("img", this.files[0]);
       axios
         .post("/post/img", formData)
@@ -101,6 +104,42 @@
               });
           }
         }
+      }
+    });
+  });
+  document.querySelectorAll(".twit-like").forEach(function (tag) {
+    tag.addEventListener("click", function () {
+      const myId = document.querySelector("#my-id");
+
+      if (myId) {
+        const postId = tag.parentNode.querySelector(".twit-id").value;
+
+        axios
+          .post(`/post/${postId}/like`)
+          .then(() => {
+            location.reload();
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
+    });
+  });
+  document.querySelectorAll(".twit-unlike").forEach(function (tag) {
+    tag.addEventListener("click", function () {
+      const myId = document.querySelector("#my-id");
+
+      if (myId) {
+        const postId = tag.parentNode.querySelector(".twit-id").value;
+
+        axios
+          .post(`/post/${postId}/unlike`)
+          .then(() => {
+            location.reload();
+          })
+          .catch((err) => {
+            console.error(err);
+          });
       }
     });
   });

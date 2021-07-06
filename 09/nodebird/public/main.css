@@ -209,6 +209,26 @@ textarea {
   cursor: pointer;
 }
 
+.twit-like {
+  padding: 1px 5px;
+  background: #fff;
+  border: 1px solid silver;
+  border-radius: 5px;
+  color: darkgrey;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.twit-unlike {
+  padding: 1px 5px;
+  background: #fff;
+  border: 1px solid silver;
+  border-radius: 5px;
+  color: cornflowerblue;
+  font-size: 12px;
+  cursor: pointer;
+}
+
 .twit-img {
   text-align: center;
 }
@@ -233,6 +253,7 @@ textarea {
 }
 
 #hashtag-form {
+  padding: 5px 0 5px 0;
   text-align: right;
 }
 

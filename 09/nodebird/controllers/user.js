@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
+const { Post } = require("../models");
 
 exports.addFollowing = async (req, res, next) => {
   try {
