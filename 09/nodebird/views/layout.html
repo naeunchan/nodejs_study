@@ -15,7 +15,7 @@
       <div class="profile-wrap">
         <div class="profile">
           {% if user and user.id %}
-          <div class="user-name">{{"Hello! " + user.nick}}</div>
+          <div class="user-name">{{user.nick}}</div>
           <div class="half">
             <div>Following</div>
             <div class="count following-count">{{followingCount}}</div>

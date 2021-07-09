@@ -225,8 +225,27 @@ textarea {
   border: 1px solid silver;
   border-radius: 5px;
   color: cornflowerblue;
+  font-weight: bold;
   font-size: 12px;
   cursor: pointer;
+}
+
+.twit-delete {
+  position: absolute;
+  right: 3%;
+  padding: 1px 5px;
+  background: #fff;
+  border: 1px solid silver;
+  border-radius: 5px;
+  color: crimson;
+  opacity: 30%;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.twit-delete:hover {
+  opacity: 100%;
 }
 
 .twit-img {

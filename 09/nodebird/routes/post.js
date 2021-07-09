@@ -70,7 +70,7 @@ router.post("/:id/like", isLoggedIn, async (req, res, next) => {
     });
 
     await post.addLiker(req.user.id);
-    res.redirect("/");
+    res.send("OK");
   } catch (error) {
     console.error(error);
     next(error);
@@ -86,11 +86,26 @@ router.post("/:id/unlike", isLoggedIn, async (req, res, next) => {
     });
 
     await post.removeLiker(req.user.id);
-    res.redirect("/");
+    res.send("OK");
   } catch (error) {
     console.error(error);
     next(error);
   }
 });
 
+router.delete("/:id", isLoggedIn, async (req, res, next) => {
+  try {
+    const post = await Post.findOne({
+      where: {
+        id: req.params.id,
+      },
+    });
+
+    await post.destroy();
+    res.send("OK");
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
 module.exports = router;
