@@ -32,10 +32,10 @@
       <button class="twit-follow">Follow</button>
       {% elif followerIdList.includes(twit.User.id) and twit.User.id !== user.id %}
       <button class="twit-unfollow">Unfollow</button>
-      {% endif %} {% if not twit.Liker.includes(user.id) %}
-      <button class="twit-like">Like</button>
+      {% endif %} {% if not twit.likers.includes(user.id)%}
+      <button class="twit-like">Like {{twit.likers.length}}</button>
       {% else %}
-      <button class="twit-unlike">Unlike</button>
+      <button class="twit-unlike">Unlike {{twit.likers.length}}</button>
       {% endif %}
       <div class="twit-content">{{twit.content}}</div>
       {% if twit.img %}

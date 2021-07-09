@@ -36,6 +36,11 @@ router.get("/", async (req, res, next) => {
       ],
       order: [["createdAt", "DESC"]],
     });
+
+    posts.forEach((post) => {
+      post.likers = post.Liker.map((l) => l.id);
+    });
+
     res.render("main", {
       title: "NodeBird",
       twits: posts,
