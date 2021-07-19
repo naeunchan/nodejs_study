@@ -1,37 +1,7 @@
-// const WebSocket = require("ws");
-
-// module.exports = (server) => {
-//   const wss = new WebSocket.Server({ server });
-
-//   wss.on("connection", (ws, req) => {
-//     const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
-//     console.log("새로운 클라이언트 접속", ip);
-//     ws.on("message", (message) => {
-//       console.log(message);
-//     });
-
-//     ws.on("error", (error) => {
-//       console.error(error);
-//     });
-
-//     ws.on("close", () => {
-//       console.log("클라이언트 접속 해제", ip);
-//       clearInterval(ws.interval);
-//     });
-
-//     ws.interval = setInterval(() => {
-//       if (ws.readyState === ws.OPEN) {
-//         ws.send("서버에서 클라이언트로 메세지를 보냅니다.");
-//       }
-//     }, 3000);
-//   });
-// };
-
 const SocketIO = require("socket.io");
 const axios = require("axios");
 const cookieParser = require("cookie-parser");
 const cookie = require("cookie-signature");
-const { connect } = require("./routes");
 
 module.exports = (server, app, sessionMiddleware) => {
   const io = SocketIO(server, { path: "/socket.io" });
@@ -39,10 +9,9 @@ module.exports = (server, app, sessionMiddleware) => {
   const room = io.of("/room");
   const chat = io.of("/chat");
 
-  io.use((socket, next) => {
-    cookieParser(process.env.COOKIE_SECRET)(socket.request, socket.request.res, next);
-    sessionMiddleware(socket.request, socket.request.res, next);
-  });
+  const wrap = (middleware) => (socket, next) => middleware(socket.request, {}, next);
+  chat.use(wrap(cookieParser(process.env.COOKIE_SECRET)));
+  chat.use(wrap(sessionMiddleware));
 
   room.on("connection", (socket) => {
     console.log("room 네임스페이스에 접속");
@@ -70,9 +39,12 @@ module.exports = (server, app, sessionMiddleware) => {
       const currentRoom = socket.adapter.rooms[roomId];
       const userCount = currentRoom ? currentRoom.length : 0;
       if (userCount === 0) {
-        const signedCookie = req.signedCookie["connect.sid"];
-        const connectSID = cookie.sign(signedCookie, process.env.COOKIE_SECRET);
-
+        // 유저가 0명이면 방 삭제
+        const signedCookie = cookie.sign(
+          req.signedCookies["connect.sid"],
+          process.env.COOKIE_SECRET
+        );
+        const connectSID = `${signedCookie}`;
         axios
           .delete(`http://localhost:8005/room/${roomId}`, {
             headers: {

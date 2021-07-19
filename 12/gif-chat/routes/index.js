@@ -1,4 +1,7 @@
 const express = require("express");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
 const Room = require("../schemas/room");
 const Chat = require("../schemas/chat");
@@ -8,10 +11,7 @@ const router = express.Router();
 router.get("/", async (req, res, next) => {
   try {
     const rooms = await Room.find({});
-    res.render("main", {
-      rooms,
-      title: "GIF Chatting Room",
-    });
+    res.render("main", { rooms, title: "GIF 채팅방" });
   } catch (error) {
     console.error(error);
     next(error);
@@ -19,9 +19,7 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/room", (req, res) => {
-  res.render("room", {
-    title: "Create GIF Chatting Room",
-  });
+  res.render("room", { title: "GIF 채팅방 생성" });
 });
 
 router.post("/room", async (req, res, next) => {
@@ -43,29 +41,25 @@ router.post("/room", async (req, res, next) => {
 
 router.get("/room/:id", async (req, res, next) => {
   try {
-    const room = await Room.findOne({
-      _id: req.params._id,
-    });
+    const room = await Room.findOne({ _id: req.params.id });
     const io = req.app.get("io");
-
     if (!room) {
-      return res.redirect("/?error=not exist room");
+      return res.redirect("/?error=존재하지 않는 방입니다.");
     }
-
     if (room.password && room.password !== req.query.password) {
-      return res.redirect("/?error=wrong password");
+      return res.redirect("/?error=비밀번호가 틀렸습니다.");
     }
-
     const { rooms } = io.of("/chat").adapter;
-
     if (rooms && rooms[req.params.id] && room.max <= rooms[req.params.id].length) {
-      return res.redirect("/?error=fulled");
+      return res.redirect("/?error=허용 인원이 초과하였습니다.");
     }
-
+    const chats = await Chat.find({
+      room: room._id,
+    }).sort("createdAt");
     return res.render("chat", {
       room,
       title: room.title,
-      chats: [],
+      chats,
       user: req.session.color,
     });
   } catch (error) {
@@ -76,17 +70,61 @@ router.get("/room/:id", async (req, res, next) => {
 
 router.delete("/room/:id", async (req, res, next) => {
   try {
-    await Room.remove({
-      _id: req.params.id,
-    });
-    await Chat.remove({
-      room: req.params.id,
-    });
-
+    await Room.remove({ _id: req.params.id });
+    await Chat.remove({ room: req.params.id });
     res.send("ok");
     setTimeout(() => {
       req.app.get("io").of("/room").emit("removeRoom", req.params.id);
     }, 2000);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.post("/room/:id/chat", async (req, res, next) => {
+  try {
+    const chat = await Chat.create({
+      room: req.params.id,
+      user: req.session.color,
+      chat: req.body.chat,
+    });
+    req.app.get("io").of("/chat").to(req.params.id).emit("chat", chat);
+    res.send("ok");
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+try {
+  fs.readdirSync("uploads");
+} catch (err) {
+  fs.mkdirSync("uploads");
+}
+
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, done) {
+      done(null, "uploads/");
+    },
+    filename(req, file, done) {
+      const ext = path.extname(file.originalname);
+      done(null.path.basename(file.originalname, ext) + DataCue.now() + ext);
+    },
+  }),
+  limits: { fileSize: 5 * 1024 * 1024 },
+});
+
+router.post("/room/:id/gif", upload.single("gif"), async (req, res, next) => {
+  try {
+    const chat = await Chat.create({
+      room: req.params.id,
+      user: req.session.color,
+      gif: req.file.filename,
+    });
+    req.app.get("io").of("/chat").to(req.params.id).emit("chat", chat);
+    res.send("ok");
   } catch (error) {
     console.error(error);
     next(error);

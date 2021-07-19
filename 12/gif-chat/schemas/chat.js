@@ -1,14 +1,12 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
-const {
-  Types: { ObjectId },
-} = Schema;
+const { Types: { ObjectId } } = Schema;
 const chatSchema = new Schema({
   room: {
     type: ObjectId,
     required: true,
-    ref: "Room",
+    ref: 'Room',
   },
   user: {
     type: String,
@@ -22,4 +20,4 @@ const chatSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model("Chat", chatSchema);
+module.exports = mongoose.model('Chat', chatSchema);
