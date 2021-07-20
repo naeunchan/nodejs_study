@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{title}}</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="profile-wrap">
+        {% if user and user.id %}
+        <div class="user-name">Hello! {{user.nick}}</div>
+        <div class="user-money">Balance : {{user.money}}</div>
+        <input type="hidden" id="my-id" value="user.id" />
+        <a href="/auth/logout" id="logout" class="btn">Logout</a>
+        <a href="/good" id="register" class="btn">Register goods</a>
+        {% else %}
+        <form action="/auth/login" id="login-form" method="post">
+          <div class="input-group">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" required autofocus />
+          </div>
+          <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required />
+          </div>
+          <a href="/join" id="join" class="btn">Join</a>
+          <button id="login" class="btn" type="submit">Login</button>
+        </form>
+        {% endif %} {% block good %} {% endblock %}
+      </div>
+      {% block content %} {% endblock %}
+    </div>
+  </body>
+  <script>
+    window.onload = () => {
+      if (new URL(location.href).searchParams.get("loginError")) {
+        alert(new URL(location.href).searchParams.get("loginError"));
+      }
+    };
+  </script>
+</html>
