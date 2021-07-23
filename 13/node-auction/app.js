@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const passport = require("passport");
 const nunjucks = require("nunjucks");
-const dotenv = requrie("dotenv");
+const dotenv = require("dotenv");
 
 dotenv.config();
 const indexRouter = require("./routes/index");
